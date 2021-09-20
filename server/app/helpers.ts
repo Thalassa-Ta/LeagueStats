@@ -1,6 +1,56 @@
 import { ParticipantBasic, ParticipantDetails } from './Models/Match'
 
 /**
+ * All League of Legends regions used in Riot API
+ */
+export enum LeagueRegion {
+  BRAZIL = 'br1',
+  EUROPE_NORTHEAST = 'eun1',
+  EUROPE_WEST = 'euw1',
+  KOREA = 'kr',
+  LATIN_AMERICA_NORTH = 'la1',
+  LATIN_AMERICA_SOUTH = 'la2',
+  NORTH_AMERICA = 'na1',
+  OCEANIA = 'oc1',
+  RUSSIA = 'ru',
+  TURKEY = 'tr1',
+  JAPAN = 'jp1',
+}
+
+/**
+ * New regions used in Riot API >= v5
+ */
+export enum RiotRegion {
+  AMERICAS = 'americas',
+  ASIA = 'asia',
+  EUROPE = 'europe',
+}
+
+/**
+ * Map old Riot API regions to new ones
+ * @param region : old region
+ * @returns new region name
+ */
+export function getRiotRegion (region: string): RiotRegion {
+  switch (region as LeagueRegion) { // TODO: remove cast when region is typed to "Region" everywhere instead of string
+    case LeagueRegion.NORTH_AMERICA:
+    case LeagueRegion.BRAZIL:
+    case LeagueRegion.LATIN_AMERICA_NORTH:
+    case LeagueRegion.LATIN_AMERICA_SOUTH:
+    case LeagueRegion.OCEANIA:
+      return RiotRegion.AMERICAS
+    case LeagueRegion.KOREA:
+    case LeagueRegion.JAPAN:
+      return RiotRegion.ASIA
+    case LeagueRegion.EUROPE_NORTHEAST:
+    case LeagueRegion.EUROPE_WEST:
+    case LeagueRegion.TURKEY:
+    case LeagueRegion.RUSSIA:
+      return RiotRegion.EUROPE
+  }
+}
+
+/**
  * League of Legends queues with defined role for each summoner
  */
 export const queuesWithRole = [
@@ -37,6 +87,14 @@ export function getSeasonNumber (timestamp: number): number {
   arrSeasons.sort()
   const indexSeason = arrSeasons.indexOf(timestamp) - 1
   return seasons[arrSeasons[indexSeason]]
+}
+
+/**
+ * Return current League of Legends season number
+ */
+export function getCurrentSeason () : number {
+  const lastTimestamp = Object.keys(seasons).pop()!
+  return seasons[lastTimestamp]
 }
 
 /**

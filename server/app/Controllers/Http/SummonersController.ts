@@ -1,4 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { getCurrentSeason } from 'App/helpers'
 import Summoner from 'App/Models/Summoner'
 import MatchRepository from 'App/Repositories/MatchRepository'
 import Jax from 'App/Services/Jax'
@@ -19,7 +20,7 @@ export default class SummonersController {
    */
   private async getSeasons (puuid: string): Promise<number[]> {
     const seasons = await MatchRepository.seasons(puuid)
-    return seasons.length ? seasons.map(s => s._id) : [10]
+    return seasons.length ? seasons.map(s => s._id) : [getCurrentSeason()]
   }
 
   /**
@@ -93,11 +94,10 @@ export default class SummonersController {
 
     // MATCHES BASIC
     const gameIds = summonerDB.matchList!.slice(0)
-      .filter(m => {
-        return season ? m.seasonMatch === season : true
-      })
+      // .filter(m => {
+      //   return season ? m.seasonMatch === season : true // TODO: filter by season
+      // })
       .slice(0, 10)
-      .map(({ gameId }) => gameId)
     finalJSON.matchesDetails = await MatchService.getMatches(puuid, accountId, region, gameIds, summonerDB)
 
     // STATS
