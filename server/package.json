@@ -24,7 +24,7 @@
     "@adonisjs/core": "^5.1.7",
     "@adonisjs/redis": "^7.0.4",
     "@zakodium/adonis-mongodb": "^0.7.0",
-    "got": "^11.8.2",
+    "got": "^11.8.5",
     "proxy-addr": "^2.0.6",
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.2",
